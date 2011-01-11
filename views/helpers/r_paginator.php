@@ -5,15 +5,18 @@
  * Possui método para imprimir/retornar todos os campos de paginação de uma única vez,
  * adiciona a url dos links de paginação as variáveis passadas via url a ação atual.
  * 
+ * PHP version 5
+ * 
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  * 
- * @copyright 2011, Radig - Soluções em TI, www.radig.com.br
- * @link http://www.radig.com.br
- * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @filesource
+ * @copyright	Copyright 2011, Radig Soluções em TI. (http://www.radig.com.br)
+ * @link        http://www.radig.com.br
+ * @license     http://www.opensource.org/licenses/mit-license.php The MIT License
  *
- * @package radig
- * @subpackage radig.pagination.views.helpers
+ * @package     radig
+ * @subpackage  radig.pagination.views.helpers
  */
 
 class RPaginatorHelper extends AppHelper
