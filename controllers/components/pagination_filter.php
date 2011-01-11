@@ -27,7 +27,7 @@ app::import('Sanitize');
 class PaginationFilterComponent extends Object
 {
 	/**
-	 * Configurações globais
+	 * Overall settings
 	 * @var array $settings
 	 */
 	public $settings;
@@ -47,18 +47,21 @@ class PaginationFilterComponent extends Object
 	 * 		'type' => 'or'
 	 * 		'fields' => array('Model1.field1', 'Model1.field2', ...)
 	 * )
-	 *  provide as much fields as the or condition needs
+	 *  provide as much fields as the or condition needs.
+	 *  
+	 *  3) Choose a query variable, using the 'query_var' option
 	 */
 	
-	public function initialize(&$controller, $settings = array()) {
+	public function initialize(&$controller, $settings = array())
+	{
 		// saving the controller reference for later use
 		$this->controller =& $controller;
 		$this->settings = $settings;
 	}
 	
 	/**
-	 * Adiciona o filtro nas opções de paginação
-	 * @return array opções de paginação
+	 * Merge aditional pagination conditions to controller paginate options
+	 * @return array pagination options
 	 */
 	
 	public function setFilter()
@@ -67,15 +70,20 @@ class PaginationFilterComponent extends Object
 		
 		if(isset($this->controller->params['url']['q']) || isset($this->controller->params['named']['q']))
 		{
-			$q = isset($this->controller->params['url']['q']) ? Sanitize::escape($this->controller->params['url']['q']) : Sanitize::espace($this->controller->params['named']['q']);
+			$query_var = $this->settings['query_var'];
 			
-			/* switching condition types*/
+			//picking a clean query string						
+			$q = isset($this->controller->params['url'][$query_var]) ? Sanitize::escape($this->controller->params['url'][$query_var]) : Sanitize::espace($this->controller->params['named'][$query_var]);
+			
+			// switching condition types
 			switch($this->settings['type'])
 			{
+				//just a "LIKE" query
 				case 'like':
 					$condition = array($this->settings['field'] . ' LIKE' => '%' . $q . '%');
 				break;
 				
+				// building an array with OR conditions to be used in the paginate query
 				case 'or':
 					foreach($this->settings['fields'] as $field)
 						$condition['OR'][$field . ' LIKE'] = '%'.$q.'%';
