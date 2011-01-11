@@ -111,6 +111,12 @@ class PaginationFilterComponent extends Object
 			$data = Sanitize::escape($this->Controller->params['url'][$this->settings['inputName']]);
 		}
 		
+		// caso não tenha nenhum dado para filtrar, apenas retorna as condições padrões do paginator
+		if(empty($data))
+		{
+			return array();
+		}
+		
 		// monta condição para cada campo de interesse
 		foreach($this->settings['queryFields'] as $field => $type)
 		{
