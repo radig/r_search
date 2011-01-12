@@ -30,6 +30,13 @@ class PaginationFilterComponent extends Object
 	protected $Controller = null;
 	
 	/**
+	 * Valor a ser buscado
+	 * 
+	 * @var string
+	 */
+	protected $query = '';
+	
+	/**
 	 * Componentes utilizados
 	 * @var array
 	 */
@@ -79,6 +86,9 @@ class PaginationFilterComponent extends Object
 	{
 		$this->Controller =& $controller;
 		
+		// seta o atributo de classe query
+		$this->setQuery();
+		
 		if($this->settings['autoFilter'] === true)
 		{
 			$this->setFilter();
@@ -94,6 +104,34 @@ class PaginationFilterComponent extends Object
 	{
 		$conditions = array();
 		
+		if(!empty($this->query))
+		{
+			// monta condição para cada campo de interesse
+			foreach($this->settings['queryFields'] as $field => $type)
+			{
+				if('like' == strtolower($type))
+					$conditions[$this->settings['comparassion']][$field . ' LIKE '] = '%' . $this->query . '%';
+				else if('=')
+					$conditions[$this->settings['comparassion']][$field] = $this->query;
+				else // <, >, >=, <=
+					 $conditions[$this->settings['comparassion']][$field . ' ' . $type . ' '] = $this->query;
+			}
+		}
+		
+		$this->Controller->paginate = array_merge($this->Controller->paginate, array('conditions' => $conditions));
+
+		// retorna as condições finais
+		return $this->Controller->paginate['conditions'];
+	}
+	
+	/**
+	 * Identifica o meio de passagem e o valor passado para filtragem
+	 * e o seta ao atributo de classe equivalente
+	 * 
+	 * @return string $query
+	 */
+	public function setQuery()
+	{
 		// caso seja uma requisição post e tenha dados do filtro setado
 		if($this->RequestHandler->isPost() && strtolower($this->settings['method']) == 'post' && !empty($this->Controller->data[$this->settings['inputModel']]))
 		{
@@ -111,27 +149,26 @@ class PaginationFilterComponent extends Object
 			$data = Sanitize::escape($this->Controller->params['url'][$this->settings['inputName']]);
 		}
 		
-		// caso não tenha nenhum dado para filtrar, apenas retorna as condições padrões do paginator
+		// caso não tenha nenhum dado para filtrar, retorna uma string vazia
 		if(empty($data))
 		{
-			return array();
+			$data = '';
 		}
 		
-		// monta condição para cada campo de interesse
-		foreach($this->settings['queryFields'] as $field => $type)
-		{
-			if('like' == strtolower($type))
-				$conditions[$this->settings['comparassion']][$field . ' LIKE '] = '%' . $data . '%';
-			else if('=')
-				$conditions[$this->settings['comparassion']][$field] = $data;
-			else // <, >, >=, <=
-				 $conditions[$this->settings['comparassion']][$field . ' ' . $type . ' '] = $data;
-		}
+		// seta o atributo da classe com o valor identificado
+		$this->query = $data;
 		
-		$this->Controller->paginate = array_merge($this->Controller->paginate, array('conditions' => $conditions));
-
-		// retorna as condições finais
-		return $this->Controller->paginate['conditions'];
+		return $data;
+	}
+	
+	/**
+	 * Retorna o valor do atributo protegido $query
+	 * 
+	 * @return string $query
+	 */
+	public function getQuery()
+	{
+		return $this->query;
 	}
 }
 
