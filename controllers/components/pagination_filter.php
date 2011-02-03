@@ -18,7 +18,7 @@
  * @subpackage	radig.pagination.controllers.components
  */
 
-App::import('Sanitize');
+App::import('Core', array('Sanitize', 'Set'));
 
 class PaginationFilterComponent extends Object
 {
@@ -118,7 +118,7 @@ class PaginationFilterComponent extends Object
 			}
 		}
 		
-		$this->Controller->paginate = array_merge($this->Controller->paginate, array('conditions' => $conditions));
+		$this->Controller->paginate = Set::merge($this->Controller->paginate, array('conditions' => $conditions));
 
 		// retorna as condições finais
 		return $this->Controller->paginate['conditions'];
