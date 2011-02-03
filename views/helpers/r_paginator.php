@@ -56,11 +56,11 @@ class RPaginatorHelper extends AppHelper
 			$this->_paginator->options(array('url' => $this->params['pass']));
 		}
 		
-		$out =	$this->_paginator->first('<< '.__('first', true), array(), null, array('class'=>'disabled')) .
-				$this->_paginator->prev(__('previous', true), array(), null, array('class'=>'disabled')) .
+		$out =	$this->_paginator->first('<< '.__d('r_search', 'first', true), array(), null, array('class'=>'disabled')) .
+				$this->_paginator->prev(__d('r_search', 'previous', true), array(), null, array('class'=>'disabled')) .
 				$this->_paginator->numbers(array('separator' => '')) .
-				$this->_paginator->next(__('next', true), array(), null, array('class' => 'disabled')) .
-				$this->_paginator->last(__('last', true).' >>', array(), null, array('class' => 'disabled'));
+				$this->_paginator->next(__d('r_search', 'next', true), array(), null, array('class' => 'disabled')) .
+				$this->_paginator->last(__d('r_search', 'last', true).' >>', array(), null, array('class' => 'disabled'));
 		
 		if(isset($options['return']) && $options['return'] === true)
 		{

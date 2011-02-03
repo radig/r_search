@@ -1,0 +1,39 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+# Cauan Cabral <cauan@radig.com.br>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2011-02-03 10:03-0300\n"
+"PO-Revision-Date: 2011-02-03 10:05-0300\n"
+"Last-Translator: Cauan Cabral <cauan@radig.com.br>\n"
+"Language-Team: Brazilian Portuguese <kde-i18n-doc@kde.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: pt_BR\n"
+"X-Generator: Lokalize 1.2\n"
+
+#: /views/helpers/r_paginator.php:59
+msgid "first"
+msgstr "primeira"
+
+#: /views/helpers/r_paginator.php:60
+msgid "previous"
+msgstr "anterior"
+
+#: /views/helpers/r_paginator.php:62
+msgid "next"
+msgstr "próxima"
+
+#: /views/helpers/r_paginator.php:63
+msgid "last"
+msgstr "última"
+
+#: /views/helpers/r_search.php:42
+msgid "RSearch Helper: missing third parameter 'getVars'"
+msgstr "RSearch Helper: faltando terceiro parâmetro 'getVars'"
+
+

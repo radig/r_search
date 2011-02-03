@@ -39,7 +39,7 @@ class RSearchHelper extends AppHelper
 	{
 		if(!isset($getVars))
 		{
-			trigger_error(__('RSearch Helper: missing third parameter \'getVars\''));
+			trigger_error(__d('r_search', 'RSearch Helper: missing third parameter \'getVars\'', true));
 			return;
 		}
 		 
