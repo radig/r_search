@@ -118,8 +118,15 @@ class PaginationFilterComponent extends Object
 			}
 		}
 		
-		$this->Controller->paginate = Set::merge($this->Controller->paginate, array('conditions' => $conditions));
-
+		if(isset($this->Controller->paginate['conditions']))
+		{
+			$this->Controller->paginate['conditions'] = Set::merge($this->Controller->paginate['conditions'], $conditions);
+		}
+		else
+		{
+			$this->Controller->paginate['conditions'] = $conditions;
+		}
+		
 		// retorna as condições finais
 		return $this->Controller->paginate['conditions'];
 	}
@@ -158,6 +165,9 @@ class PaginationFilterComponent extends Object
 		// seta o atributo da classe com o valor identificado
 		$this->query = $data;
 		
+		// seta para a view
+		$this->Controller->set('search_query', $this->query);
+		
 		return $data;
 	}
 	
@@ -171,5 +181,3 @@ class PaginationFilterComponent extends Object
 		return $this->query;
 	}
 }
-
-?>
