@@ -103,12 +103,15 @@ class PaginationFilterComponent extends Object
 	public function setFilter()
 	{
 		$conditions = array();
+		$contain = array();
 		
 		if(!empty($this->query))
 		{
 			// monta condição para cada campo de interesse
 			foreach($this->settings['queryFields'] as $field => $type)
 			{
+				$contain = array_merge($contain, $this->__getModels($field));
+				
 				if('like' == strtolower($type))
 					$conditions[$this->settings['comparassion']][$field . ' LIKE '] = '%' . $this->query . '%';
 				else if('=')
@@ -116,6 +119,15 @@ class PaginationFilterComponent extends Object
 				else // <, >, >=, <=
 					 $conditions[$this->settings['comparassion']][$field . ' ' . $type . ' '] = $this->query;
 			}
+		}
+		
+		if(isset($this->Controller->paginate['contain']))
+		{
+			$this->Controller->paginate['contain'] = Set::merge($this->Controller->paginate['contain'], $contain);
+		}
+		else
+		{
+			$this->Controller->paginate['contain'] = $contain;
 		}
 		
 		if(isset($this->Controller->paginate['conditions']))
@@ -179,5 +191,44 @@ class PaginationFilterComponent extends Object
 	public function getQuery()
 	{
 		return $this->query;
+	}
+	
+	/**
+	 * Identifica e retorna os modelos contidos no campo field passados.
+	 * 
+	 * Recebe como referência o campo field e altera-o para que contenha apenas
+	 * o Model.field (sem os modelos associados).
+	 * 
+	 * @param string $field
+	 * 
+	 * @return array $models
+	 */
+	protected function __getModels(&$field)
+	{
+		$models = array();
+		
+		$parts = explode('.', $field);
+		
+		foreach($parts as $part)
+		{
+			// caso seja camelCase, considera como um modelo
+			if($part == ucfirst($part))
+			{
+				$models[] = $part;
+			}
+		}
+		
+		if(count($models) > 1)
+		{
+			foreach($parts as $part)
+			{
+				if($part != end($models))
+				{
+					$field = str_replace($part . '.', '', $field);
+				}
+			}
+		}
+		
+		return $models;
 	}
 }
