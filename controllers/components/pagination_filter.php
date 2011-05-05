@@ -177,6 +177,11 @@ class PaginationFilterComponent extends Object
 		// seta o atributo da classe com o valor identificado
 		$this->query = $data;
 		
+		if(isset($this->settings['cleanupQuery']) && $this->settings['cleanupQuery'] === true)
+		{
+			$this->__clenupQuery();
+		}
+		
 		// seta para a view
 		$this->Controller->set('search_query', $this->query);
 		
@@ -230,5 +235,14 @@ class PaginationFilterComponent extends Object
 		}
 		
 		return $models;
+	}
+	
+	/**
+	 * Aplica alguns filtros para limpeza da query de busca
+	 * 
+	 */
+	protected function __clenupQuery()
+	{
+		$this->query = trim($this->query);
 	}
 }
