@@ -49,6 +49,7 @@ class PaginationFilterComponent extends Object
 	 * - string inputModel nome do modelo com os dados para busca
 	 * - string inputString namo do campo com os dados para busca
 	 * - string comparassion tipo de computação entre as comparações (união: 'or'; disjunção: 'and')
+	 * - bool cleanupQuery true para limpar a string de query antes de montar a busca
 	 * - array queryFields contém todos os campos que serão comparados com a entrada associado com o 
 	 * tipo de comparação.
 	 *   exemplo: array('User.name' => 'like', 'User.age' => '=', 'User.salary' => '<')
@@ -57,10 +58,11 @@ class PaginationFilterComponent extends Object
 	 */
 	public $settings = array(
 		'autoFilter' => false,
-		'method' => 'post', 
+		'method' => 'post',
 		'inputModel' => 'Filter',
 		'inputName' => 'q',
-		'comparassion' => 'or', 
+		'comparassion' => 'or',
+		'cleanupQuery' => true,
 		'queryFields' => array()
 	);
 	
