@@ -111,13 +111,19 @@ class PaginationFilterComponent extends Object
 			foreach($this->settings['queryFields'] as $field => $type)
 			{
 				$contain = array_merge($contain, $this->__getModels($field));
+				$type = strtolower($type);
 				
-				if('like' == strtolower($type))
-					$conditions[$this->settings['comparassion']][$field . ' LIKE '] = '%' . $this->query . '%';
-				else if('=')
-					$conditions[$this->settings['comparassion']][$field] = $this->query;
-				else // <, >, >=, <=
-					 $conditions[$this->settings['comparassion']][$field . ' ' . $type . ' '] = $this->query;
+				switch($type)
+				{
+					case 'like':
+						$conditions[$this->settings['comparassion']][$field . ' LIKE '] = '%' . $this->query . '%';
+						break;
+					case '=':
+						$conditions[$this->settings['comparassion']][$field] = $this->query;
+						break;
+					default: // <, >, >=, <=
+						$conditions[$this->settings['comparassion']][$field . ' ' . $type . ' '] = $this->query;
+				}
 			}
 		}
 		
