@@ -18,7 +18,7 @@
  * @subpackage	radig.pagination.controllers.components
  */
 
-App::import('Core', array('Sanitize', 'Set'));
+App::uses('Sanitize', 'Utility');
 
 class PaginationFilterComponent extends Component
 {
@@ -56,7 +56,7 @@ class PaginationFilterComponent extends Component
 	 * 
 	 * @var array $settings
 	 */
-	public $settings = array(
+	public $defaultSettings = array(
 		'autoFilter' => false,
 		'method' => 'post',
 		'inputModel' => 'Filter',
@@ -65,18 +65,28 @@ class PaginationFilterComponent extends Component
 		'cleanupQuery' => true,
 		'queryFields' => array()
 	);
+
+	/**
+	 * Construção do componente
+	 *
+	 * @param ComponentCollection $collection A ComponentCollection for this component
+	 * @param array $settings Array of settings.
+ 	 */
+	public function __construct(ComponentCollection $collection, $settings = array()) {
+		parent::__construct($collection, $settings);
+		
+		$this->settings = array_merge($this->defaultSettings, $settings);
+    }
 	
 	/**
 	 * Inicialização do componente
 	 * 
 	 * @param Controller $controller
-	 * @param array $settings
 	 */
-	public function initialize(&$controller, $settings = array())
+	public function initialize(&$controller)
 	{	
 		// saving the controller reference for later use
 		$this->Controller =& $controller;
-		$this->settings = Set::merge($this->settings, $settings);
 	}
 	
 	/**
@@ -154,18 +164,18 @@ class PaginationFilterComponent extends Component
 	public function setQuery()
 	{
 		// caso seja uma requisição post e tenha dados do filtro setado
-		if($this->RequestHandler->isPost() && strtolower($this->settings['method']) == 'post' && !empty($this->Controller->data[$this->settings['inputModel']]))
+		if($this->Controller->request->is('post') && strtolower($this->settings['method']) == 'post' && !empty($this->Controller->data[$this->settings['inputModel']]))
 		{
 			// recupera os dados setados
 			$data = $this->Controller->data[$this->settings['inputModel']][$this->settings['inputName']];
 		}
 		// caso seja uma requisição get com named parameters e tenha dados do filtro na url
-		else if($this->RequestHandler->isGet() && !empty($this->Controller->passedArgs[$this->settings['inputName']]))
+		else if($this->Controller->request->is('get') && !empty($this->Controller->passedArgs[$this->settings['inputName']]))
 		{
 			$data = Sanitize::escape($this->Controller->passedArgs[$this->settings['inputName']]);
 		}
 		// caso seja uma requisão get padrão (com o símbolo ?) e tenha os dados do filtro na url
-		else if($this->RequestHandler->isGet() && !empty($this->Controller->params['url'][$this->settings['inputName']]))
+		else if($this->Controller->request->is('get') && !empty($this->Controller->params['url'][$this->settings['inputName']]))
 		{
 			$data = Sanitize::escape($this->Controller->params['url'][$this->settings['inputName']]);
 		}
